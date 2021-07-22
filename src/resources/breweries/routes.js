@@ -1,3 +1,7 @@
+const express = require("express");
+
+const breweriesRouter = express.Router();
+
 const breweries = [
   {
     id: 9094,
@@ -401,50 +405,28 @@ const breweries = [
   },
 ];
 
-const express = require("express");
-const morgan = require("morgan");
+breweriesRouter.get("/", (req, res) => {
+//   const breweryType = req.query.brewery_type;
 
-const app = express();
+//   const breweries = breweries.filter(
+//     (brewery) => breweryType === brewery.brewery_type
+//   );
 
-app.use(morgan("dev"));
-
-app.get("/breweries", (req, res) => {
-  const breweryType = req.query.brewery_type;
-
-  if (breweryType) {
-    const breweryType = breweries.filter(
-      (brewery) => breweryType === brewery.brewery_type
-    );
-
-    const response = filteredBreweries.length
-      ? filteredBreweries
-      : "Can't find breweries of that type";
-
-    res.json({ breweries: response });
-  } else {
-    res.json({ breweries: breweries });
-  }
+  res.json({ breweries });
 });
 
-app.get("/breweries/:id", (req, res) => {
+breweriesRouter.get("/:id", (req, res) => {
   const breweryId = Number(req.params.id);
   const brewery = breweries.find((brewery) => brewery.id === breweryId);
 
-  if (brewery) {
-    res.json({ brewery });
-  } else {
-    res.json({ msg: "Can't find brewery" });
-  }
+  res.json({ brewery });
 });
 
+// breweriesRouter.post("/", (req, res) => {
+//   const newBrewery = req.body;
+//   breweries = [...breweries, newBrewery];
 
-app.post("/breweries", (req, res) => {
-  const newBrewery = req.body;
-  breweries = [...breweries, newBrewery];
+//   res.json({ brewery: newBrewery });
+// });
 
-  res.json({ brewery: newBrewery });
-});
-
-app.listen(4000, () => {
-  console.log("I'm running!");
-});
+module.exports = breweriesRouter;
